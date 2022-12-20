@@ -1,6 +1,6 @@
 import logging
 from rich.logging import RichHandler
-from rich.traceback import install
+# from rich.traceback import install
 from .args import get_args
 
 
@@ -16,7 +16,7 @@ def setup():
         handlers=[RichHandler()]
     )
     # setup traceback handler
-    install(show_locals=True)
+    # install(show_locals=True)
 
 
 def main():

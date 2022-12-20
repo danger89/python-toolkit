@@ -1,15 +1,14 @@
 import bs4
 import os
 import requests
-from fake_useragent import UserAgent
 from functools import partial
 from urllib.parse import urlparse
-from ..util import fill_uri_prefix, duplicate_filename, TaskPool
+from ..util import fill_uri_prefix, duplicate_filename, TaskPool, random_agent
 
 
-def download_image(uri, output_dir):
+def download_image(uri, output_dir, args):
     r = requests.get(uri, headers={
-        "User-Agent": str(UserAgent().random)
+        "User-Agent": random_agent(args.use_fake_agent),
     })
     if r.status_code == requests.codes.ok:
         filename = os.path.basename(urlparse(uri).path)
@@ -35,5 +34,5 @@ def main(args):
         if "src" in img_tag.attrs:
             uri = fill_uri_prefix(img_tag.attrs["src"], args.prefix)
             callables.append(partial(download_image, uri=uri, 
-                                     output_dir=args.output))
+                                     output_dir=args.output, args=args))
     TaskPool(callables, "Web Image Download", threads=args.threads).start()

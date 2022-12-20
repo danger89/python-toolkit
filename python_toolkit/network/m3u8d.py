@@ -2,15 +2,14 @@ import m3u8
 import os
 import requests
 import shutil
-from fake_useragent import UserAgent
 from functools import partial
 from urllib.parse import urlparse
-from ..util import TaskPool, remove_filename_ext
+from ..util import TaskPool, remove_filename_ext, random_agent
 
 
-def download_slice(uri, video_name):
+def download_slice(uri, video_name, args):
     r = requests.get(uri, headers={
-        "User-Agent": str(UserAgent().random)
+        "User-Agent": random_agent(args.use_fake_agent),
     })
     if r.status_code == requests.codes.ok:
         filename = os.path.basename(urlparse(uri).path)
@@ -23,12 +22,14 @@ def download_slice(uri, video_name):
 
 
 def main(args):
-    playlist = m3u8.load(args.url)
+    playlist = m3u8.load(args.url, headers={
+        "User-Agent": random_agent(args.use_fake_agent),
+    })
     video_name = args.name or os.path.basename(urlparse(args.url).path)
     video_name = remove_filename_ext(video_name) or "video"
     os.makedirs(video_name, exist_ok=True)
     callables = [
-        partial(download_slice, uri=seg.absolute_uri, video_name=video_name)
+        partial(download_slice, uri=seg.absolute_uri, video_name=video_name, args=args)
         for seg in playlist.segments
     ]
     TaskPool(callables, video_name, threads=args.threads).start()
