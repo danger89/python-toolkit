@@ -13,6 +13,7 @@ def get_args():
     parser_m3u8d.add_argument("-n", "--name", type=str)
     parser_m3u8d.add_argument("-t", "--threads", type=int, default=15)
     parser_m3u8d.add_argument("--use-fake-agent", action="store_true")
+    parser_m3u8d.add_argument("--no-verify-ssl", action="store_true")
     parser_m3u8d.set_defaults(callback=main_m3u8d)
 
     parser_webimd = subparsers.add_parser("webimd", help="Download all "
@@ -22,6 +23,7 @@ def get_args():
     parser_webimd.add_argument("-t", "--threads", type=int, default=15)
     parser_webimd.add_argument("-p", "--prefix", type=str)
     parser_webimd.add_argument("--use-fake-agent", action="store_true")
+    parser_webimd.add_argument("--no-serial-number", action="store_true")
     parser_webimd.set_defaults(callback=main_webimd)
 
     return parser.parse_args()

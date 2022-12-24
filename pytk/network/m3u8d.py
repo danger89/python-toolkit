@@ -10,7 +10,7 @@ from ..util import TaskPool, remove_filename_ext, random_agent
 def download_slice(uri, video_name, args):
     r = requests.get(uri, headers={
         "User-Agent": random_agent(args.use_fake_agent),
-    })
+    }, verify=not args.no_verify_ssl)
     if r.status_code == requests.codes.ok:
         filename = os.path.basename(urlparse(uri).path)
         path = os.path.join(video_name, filename)
@@ -24,7 +24,7 @@ def download_slice(uri, video_name, args):
 def main(args):
     playlist = m3u8.load(args.url, headers={
         "User-Agent": random_agent(args.use_fake_agent),
-    })
+    }, verify_ssl=not args.no_verify_ssl)
     video_name = args.name or os.path.basename(urlparse(args.url).path)
     video_name = remove_filename_ext(video_name) or "video"
     os.makedirs(video_name, exist_ok=True)
