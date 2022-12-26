@@ -11,7 +11,7 @@ My customize Python toolkit. Currently implemented commands are as follow:
 ### m3u8d
 
 ```shell
-python -m python_toolkit m3u8d [-h] [-n NAME] [-t THREADS] url
+python -m pytk m3u8d [-h] [-n NAME] [-t THREADS] [--use-fake-agent] [--no-verify-ssl] url
 ```
 
 **Arguments**
@@ -19,6 +19,8 @@ python -m python_toolkit m3u8d [-h] [-n NAME] [-t THREADS] url
 - `url`: URL to the requested m3u8 file.
 - `name`: Filename of the downloaded video. By default, it's parsed from url.
 - `threads`: Number of threads which is used for download. It's `15` by default.
+- `use-fake-agent`: If set, `User-Agent` in the header of requests will be generated with `fake-useragent`.
+- `no-verify-ssl`: If set, connection will not be verified even if it's an https connection. Be cautious with this option.
 
 ### webimd
 
@@ -38,8 +40,8 @@ It's highly recommended that you add follow aliases to your `.bashrc` (or `.zshr
 ### Aliases
 
 ```bash
-alias m3u8d="python -m python_toolkit m3u8d"
-alias webimd="python -m python_toolkit webimd"
+alias m3u8d="python -m pytk m3u8d"
+alias webimd="python -m pytk webimd"
 ```
 
 # Roadmap
